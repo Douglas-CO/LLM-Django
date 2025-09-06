@@ -1,0 +1,55 @@
+# ---------------------------
+# Entorno virtual
+# ---------------------------
+venv/
+.env
+*.env
+
+# ---------------------------
+# Archivos de Python compilados
+# ---------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---------------------------
+# Django
+# ---------------------------
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+static/
+# Si usas migrations
+**/migrations/*.py[cod]
+**/migrations/__pycache__/
+
+# ---------------------------
+# PyTorch / modelos entrenados
+# ---------------------------
+checkpoints/
+*.pt
+*.pth
+
+# ---------------------------
+# Jupyter / notebooks
+# ---------------------------
+.ipynb_checkpoints/
+
+# ---------------------------
+# IDEs
+# ---------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ---------------------------
+# Otros
+# ---------------------------
+.DS_Store
+*.bak
+*.swp
