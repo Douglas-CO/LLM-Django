@@ -4,10 +4,9 @@ import torch
 import json
 from django.http import JsonResponse
 from model import TinyGPT
-from .verificar_frase import verificar_frase  # 👈 importar la función de verificación
 
 # ---------------------------
-# Cargar vocabulario
+# Cargar vocabulario para el LLM
 # ---------------------------
 with open("checkpoints/vocab.json", "r", encoding="utf-8") as f:
     itos = json.load(f)  # id -> caracter
@@ -58,12 +57,46 @@ def generate(request):
     return JsonResponse({"prompt": prompt, "completion": completion})
 
 # ---------------------------
-# Endpoint /api/verificar_frase/
+# Nueva función para verificar frase y devolver respuesta humana
 # ---------------------------
+def buscar_frases_por_autor(autor, max_resultados=3):
+    autor = autor.lower().strip()
+    frases_encontradas = []
+
+    try:
+        with open("data/famosas.txt", "r", encoding="utf-8") as f:
+            for line in f:
+                if " - " not in line:
+                    continue
+                frase, autor_linea = line.strip().split(" - ")
+                if autor in autor_linea.lower():
+                    frases_encontradas.append(frase)
+    except FileNotFoundError:
+        return "No se encontró el archivo de frases famosas."
+
+    if not frases_encontradas:
+        return f"No se encontraron frases de {autor.title()}."
+    
+    cantidad = len(frases_encontradas)
+    muestra = frases_encontradas[:max_resultados]
+    return f"{autor.title()} dijo {cantidad} frases célebres, siendo algunas: {', '.join(muestra)}."
+
 def verificar_frase_view(request):
     prompt = request.GET.get("prompt", "")
     if not prompt:
         return JsonResponse({"error": "No se proporcionó prompt"}, status=400)
     
-    respuesta = verificar_frase(prompt)
+    # Extraer autor del prompt (heurística simple)
+    palabras = prompt.lower().split()
+    autor = None
+    autores_posibles = ["aristóteles", "einstein", "descartes", "shakespeare"]  # ampliar según tus datos
+    for palabra in palabras:
+        if palabra in autores_posibles:
+            autor = palabra
+            break
+
+    if not autor:
+        return JsonResponse({"respuesta": "No pude identificar el autor en tu pregunta."})
+
+    respuesta = buscar_frases_por_autor(autor)
     return JsonResponse({"respuesta": respuesta})

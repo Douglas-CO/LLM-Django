@@ -2,6 +2,10 @@
 
 Proyecto educativo que entrena un **mini LLM** (Transformer a nivel de caracteres) en un dataset pequeño y expone un endpoint en **Django** para generar texto.
 
+```bash
+source venv/bin/activate
+```
+
 ## Requisitos
 ```bash
 pip install -r requirements.txt
@@ -26,7 +30,7 @@ python manage.py migrate   # base de datos vacía (solo sistema)
 python manage.py runserver
 ```
 Endpoint:
-- GET/POST `http://127.0.0.1:8000/api/generate/?prompt=La vida `
+- GET/POST `http://127.0.0.1:8000/api/verificar_frase/?prompt=la vida es sueño`
 
 Respuesta JSON:
 ```json
@@ -34,7 +38,3 @@ Respuesta JSON:
 ```
 
 > Nota: Es un modelo muy pequeño y entrenado con poco texto. Su objetivo es **didáctico**.
-
-
-
-http://127.0.0.1:8000/api/verificar_frase/?prompt=la vida es sueño
